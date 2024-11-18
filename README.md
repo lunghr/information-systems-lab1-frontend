@@ -5,78 +5,40 @@
 Реализовать информационную систему, которая позволяет взаимодействовать с объектами класса BookCreature, описание
 которого приведено ниже:
 
-```js
-public
-
-class BookCreature {
-    private long
-    id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
-    private String
-    name; //Поле не может быть null, Строка не может быть пустой
-    private Coordinates
-    coordinates; //Поле не может быть null
-    private java
-.
-    time
-.
-    ZonedDateTime
-    creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
-    private int
-    age; //Значение поля должно быть больше 0
-    private BookCreatureType
-    creatureType; //Поле не может быть null
-    private MagicCity
-    creatureLocation; //Поле не может быть null
-    private Float
-    attackLevel; //Значение поля должно быть больше 0, Поле может быть null
-    private Ring
-    ring; //Поле не может быть null
+```java
+public class BookCreature {
+    private long id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
+    private String name; //Поле не может быть null, Строка не может быть пустой
+    private Coordinates coordinates; //Поле не может быть null
+    private java.time.ZonedDateTime creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
+    private int age; //Значение поля должно быть больше 0
+    private BookCreatureType creatureType; //Поле не может быть null
+    private MagicCity creatureLocation; //Поле не может быть null
+    private Float attackLevel; //Значение поля должно быть больше 0, Поле может быть null
+    private Ring ring; //Поле не может быть null
 }
 
-public
-
-class Coordinates {
-    private Integer
-    x; //Максимальное значение поля: 506, Поле не может быть null
-    private double
-    y; //Значение поля должно быть больше -376
+public class Coordinates {
+    private Integer x; //Максимальное значение поля: 506, Поле не может быть null
+    private double y; //Значение поля должно быть больше -376
 }
 
-public
-
-class MagicCity {
-    private String
-    name; //Поле не может быть null, Строка не может быть пустой
-    private Double
-    area; //Значение поля должно быть больше 0, Поле не может быть null
-    private int
-    population; //Значение поля должно быть больше 0
-    private java
-.
-    time
-.
-    LocalDateTime
-    establishmentDate;
-    private BookCreatureType
-    governor; //Поле может быть null
-    private boolean
-    capital;
-    private double
-    populationDensity; //Значение поля должно быть больше 0
+public class MagicCity {
+    private String name; //Поле не может быть null, Строка не может быть пустой
+    private Double area; //Значение поля должно быть больше 0, Поле не может быть null
+    private int population; //Значение поля должно быть больше 0
+    private java.time.LocalDateTime establishmentDate;
+    private BookCreatureType governor; //Поле может быть null
+    private boolean capital;
+    private double populationDensity; //Значение поля должно быть больше 0
 }
 
-public
-
-class Ring {
-    private String
-    name; //Поле не может быть null, Строка не может быть пустой
-    private int
-    weight; //Значение поля должно быть больше 0
+public class Ring {
+    private String name; //Поле не может быть null, Строка не может быть пустой
+    private int weight; //Значение поля должно быть больше 0
 }
 
-public
-
-enum BookCreatureType {
+public enum BookCreatureType {
     HOBBIT,
     ELF,
     GOLLUM;
@@ -121,7 +83,6 @@ enum BookCreatureType {
   сообщения о соответствующих ошибках.
 
 В системе должен быть реализован отдельный пользовательский интерфейс для выполнения специальных операций над объектами:
-
 - Удалить один (любой) объект, значение поля ring которого эквивалентно заданному.
 - Вернуть один (любой) объект, значение поля age которого является максимальным.
 - Вернуть массив объектов, значение поля name которых содержит заданную подстроку.
@@ -129,10 +90,7 @@ enum BookCreatureType {
 - Уничтожить города эльфов.
 
 ## Technologies
-
 При разработке ИС должны учитываться следующие требования:
-
 - В качестве основы для реализации ИС необходимо использовать Spring MVC.
 - Для создания уровня хранения необходимо использовать Hibernate.
-- Разные уровни приложения должны быть отделены друг от друга, разные логические части ИС должны находиться в отдельных
-  компонентах.
+- Разные уровни приложения должны быть отделены друг от друга, разные логические части ИС должны находиться в отдельных компонентах.
