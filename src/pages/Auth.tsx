@@ -9,31 +9,77 @@ import Link from "@mui/joy/Link";
 import { Link as RouterLink } from "react-router-dom";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
+import { useState } from "react";
+import { FormHelperText } from "@mui/joy";
 
 const basePath = import.meta.env.BASE_URL;
 
 interface FormElements extends HTMLFormControlsCollection {
   login: HTMLInputElement;
   password: HTMLInputElement;
-  persistent: HTMLInputElement;
 }
 
 interface SignInFormElement extends HTMLFormElement {
   readonly elements: FormElements;
 }
 
-const submitForm = (event: React.FormEvent<SignInFormElement>) => {
-  event.preventDefault();
-  const formElements = event.currentTarget.elements;
-  const data = {
-    login: formElements.login.value,
-    password: formElements.password.value,
-    persistent: formElements.persistent.checked,
-  };
-  alert(JSON.stringify(data, null, 2));
-};
-
 export const Auth = () => {
+  const [loginError, setLoginError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+
+  const [loginErrorText, setLoginErrorText] = useState("");
+  const [passwordErrorText, setPasswordErrorText] = useState("");
+
+  const validateLogin = (value: string) => {
+    if (value === "") {
+      setLoginError(true);
+      setLoginErrorText("Поле не должно быть пустым");
+    } else if (value.length < 5) {
+      setLoginError(true);
+      setLoginErrorText("Минимальная длина 5 символа");
+    } else if (value.length > 16) {
+      setLoginError(true);
+      setLoginErrorText("Максимальная длина 16 символов");
+    } else {
+      setLoginError(false);
+      setLoginErrorText("");
+      return true;
+    }
+    return false;
+  };
+
+  const validatePassword = (value: string) => {
+    if (value === "") {
+      setPasswordError(true);
+      setPasswordErrorText("Поле не должно быть пустым");
+    } else if (value.length < 5) {
+      setPasswordError(true);
+      setPasswordErrorText("Минимальная длина 8 символов");
+    } else if (value.length > 16) {
+      setPasswordError(true);
+      setPasswordErrorText("Максимальная длина 255 символов");
+    } else {
+      setPasswordError(false);
+      setPasswordErrorText("");
+
+      return true;
+    }
+    return false;
+  };
+
+  const submitForm = (event: React.FormEvent<SignInFormElement>) => {
+    event.preventDefault();
+    const formElements = event.currentTarget.elements;
+    const data = {
+      login: formElements.login.value,
+      password: formElements.password.value,
+    };
+
+    if (!validateLogin(data.login) || !validatePassword(data.password)) return;
+
+    alert(JSON.stringify(data, null, 2));
+  };
+
   return (
     <>
       <Box
@@ -108,28 +154,21 @@ export const Auth = () => {
             </Divider>
             <Stack sx={{ gap: 4, mt: 2 }}>
               <form onSubmit={submitForm}>
-                <FormControl required>
+                <FormControl error={loginError}>
                   <FormLabel>Логин</FormLabel>
                   <Input type="text" name="login" />
+                  <FormHelperText>
+                    {loginError && loginErrorText}
+                  </FormHelperText>
                 </FormControl>
-                <FormControl required>
+                <FormControl error={passwordError}>
                   <FormLabel>Пароль</FormLabel>
                   <Input type="password" name="password" />
+                  <FormHelperText>
+                    {passwordError && passwordErrorText}
+                  </FormHelperText>
                 </FormControl>
                 <Stack sx={{ gap: 4, mt: 2 }}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Checkbox
-                      size="sm"
-                      label="Запомнить меня"
-                      name="persistent"
-                    />
-                  </Box>
                   <Button type="submit" fullWidth>
                     Войти
                   </Button>
