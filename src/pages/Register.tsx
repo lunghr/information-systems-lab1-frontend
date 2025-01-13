@@ -4,7 +4,7 @@ import Divider from "@mui/joy/Divider";
 import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
 import Input from "@mui/joy/Input";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import { FormHelperText } from "@mui/joy";
@@ -25,6 +25,8 @@ interface SignInFormElement extends HTMLFormElement {
 }
 
 const Register = () => {
+  const navigate = useNavigate();
+
   const [authError, setAuthError] = useState(false);
   const [loginError, setLoginError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
@@ -104,6 +106,8 @@ const Register = () => {
 
       setAuthErrorText("");
       setAuthError(false);
+
+      navigate("/");
     } catch (error) {
       console.error(error);
 
