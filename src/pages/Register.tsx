@@ -4,12 +4,13 @@ import Divider from "@mui/joy/Divider";
 import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
 import Input from "@mui/joy/Input";
-import Link from "@mui/joy/Link";
 import { Link as RouterLink } from "react-router-dom";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import { FormHelperText } from "@mui/joy";
 import { useState } from "react";
+import api from "../lib/api";
+import authStore from "../store/auth";
 
 const basePath = import.meta.env.BASE_URL;
 
@@ -23,11 +24,13 @@ interface SignInFormElement extends HTMLFormElement {
   readonly elements: FormElements;
 }
 
-export const Register = () => {
+const Register = () => {
+  const [authError, setAuthError] = useState(false);
   const [loginError, setLoginError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [passwordRepeatError, setPasswordRepeatError] = useState(false);
 
+  const [authErrorText, setAuthErrorText] = useState("");
   const [loginErrorText, setLoginErrorText] = useState("");
   const [passwordErrorText, setPasswordErrorText] = useState("");
   const [passwordRepeatErrorText, setPasswordRepeatErrorText] = useState("");
@@ -74,7 +77,7 @@ export const Register = () => {
     return false;
   };
 
-  const submitForm = (event: React.FormEvent<SignInFormElement>) => {
+  const submitForm = async (event: React.FormEvent<SignInFormElement>) => {
     event.preventDefault();
     const formElements = event.currentTarget.elements;
     const data = {
@@ -90,7 +93,23 @@ export const Register = () => {
       return;
     }
 
-    alert(JSON.stringify(data, null, 2));
+    try {
+      const response = await api.post("/auth/register", {
+        username: data.login,
+        password: data.password,
+      });
+
+      const token = response.data.token;
+      authStore.setAuth(data.login, token);
+
+      setAuthErrorText("");
+      setAuthError(false);
+    } catch (error) {
+      console.error(error);
+
+      setAuthErrorText("Имя пользователя уже занято");
+      setAuthError(true);
+    }
   };
 
   return (
@@ -150,9 +169,7 @@ export const Register = () => {
                 </Typography>
                 <Typography level="body-sm">
                   Уже есть аккаунт?{" "}
-                  <RouterLink to="/auth/login">
-                    <Link level="title-sm">Перейди ко входу!</Link>
-                  </RouterLink>
+                  <RouterLink to="/auth/login">Перейди ко входу!</RouterLink>
                 </Typography>
               </Stack>
             </Stack>
@@ -188,7 +205,7 @@ export const Register = () => {
                     {passwordRepeatError && passwordRepeatErrorText}
                   </FormHelperText>
                 </FormControl>
-                <Stack sx={{ gap: 4, mt: 2 }}>
+                <Stack sx={{ gap: 2 }}>
                   <Box
                     sx={{
                       display: "flex",
@@ -196,6 +213,9 @@ export const Register = () => {
                       alignItems: "center",
                     }}
                   ></Box>
+                  <Typography level="body-sm" color="danger">
+                    {authError && authErrorText}
+                  </Typography>
                   <Button type="submit" fullWidth>
                     Зарегистрироваться
                   </Button>
@@ -234,3 +254,5 @@ export const Register = () => {
     </>
   );
 };
+
+export default Register;

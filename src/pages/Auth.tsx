@@ -4,12 +4,14 @@ import Divider from "@mui/joy/Divider";
 import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
 import Input from "@mui/joy/Input";
-import Link from "@mui/joy/Link";
 import { Link as RouterLink } from "react-router-dom";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import { useState } from "react";
 import { FormHelperText } from "@mui/joy";
+import api from "../lib/api";
+import { useAuthStore } from "../context/authContext";
+import { observer } from "mobx-react-lite";
 
 const basePath = import.meta.env.BASE_URL;
 
@@ -22,12 +24,16 @@ interface SignInFormElement extends HTMLFormElement {
   readonly elements: FormElements;
 }
 
-export const Auth = () => {
+const Auth = observer(() => {
+  const [authError, setAuthError] = useState(false);
   const [loginError, setLoginError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
 
+  const [authErrorText, setAuthErrorText] = useState("");
   const [loginErrorText, setLoginErrorText] = useState("");
   const [passwordErrorText, setPasswordErrorText] = useState("");
+
+  const authStore = useAuthStore();
 
   const validateLogin = (value: string) => {
     if (value === "") {
@@ -66,7 +72,7 @@ export const Auth = () => {
     return false;
   };
 
-  const submitForm = (event: React.FormEvent<SignInFormElement>) => {
+  const submitForm = async (event: React.FormEvent<SignInFormElement>) => {
     event.preventDefault();
     const formElements = event.currentTarget.elements;
     const data = {
@@ -76,7 +82,23 @@ export const Auth = () => {
 
     if (!validateLogin(data.login) || !validatePassword(data.password)) return;
 
-    alert(JSON.stringify(data, null, 2));
+    try {
+      const response = await api.post("/auth/login", {
+        username: data.login,
+        password: data.password,
+      });
+
+      const token = response.data.token;
+      authStore.setAuth(data.login, token);
+
+      setAuthErrorText("");
+      setAuthError(false);
+    } catch (error) {
+      console.error(error);
+
+      setAuthErrorText("Неверные данные пользователя");
+      setAuthError(true);
+    }
   };
 
   return (
@@ -136,9 +158,7 @@ export const Auth = () => {
                 </Typography>
                 <Typography level="body-sm">
                   Нет аккаунта?{" "}
-                  <RouterLink to="/auth/register">
-                    <Link level="title-sm">Зарегистрируйся!</Link>
-                  </RouterLink>
+                  <RouterLink to="/auth/register">Зарегистрируйся!</RouterLink>
                 </Typography>
               </Stack>
             </Stack>
@@ -151,7 +171,7 @@ export const Auth = () => {
             >
               или
             </Divider>
-            <Stack sx={{ gap: 4, mt: 2 }}>
+            <Stack sx={{ gap: 2 }}>
               <form onSubmit={submitForm}>
                 <FormControl error={loginError}>
                   <FormLabel>Логин</FormLabel>
@@ -167,6 +187,9 @@ export const Auth = () => {
                     {passwordError && passwordErrorText}
                   </FormHelperText>
                 </FormControl>
+                <Typography level="body-sm" color="danger">
+                  {authError && authErrorText}
+                </Typography>
                 <Stack sx={{ gap: 4, mt: 2 }}>
                   <Button type="submit" fullWidth>
                     Войти
@@ -205,4 +228,6 @@ export const Auth = () => {
       />
     </>
   );
-};
+});
+
+export default Auth;

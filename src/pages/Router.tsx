@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Auth } from "./Auth";
-import { Register } from "./Register";
+import Auth from "./Auth";
+import Register from "./Register";
 import { useAuthStore } from "../context/authContext";
 import { useEffect } from "react";
 import { observer } from "mobx-react-lite";
