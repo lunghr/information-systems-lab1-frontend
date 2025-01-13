@@ -1,26 +1,11 @@
 import Box from "@mui/joy/Box";
-import FormControl from "@mui/joy/FormControl";
-import FormLabel from "@mui/joy/FormLabel";
-import Input from "@mui/joy/Input";
-import Select from "@mui/joy/Select";
-import Option from "@mui/joy/Option";
-import Table from "@mui/joy/Table";
-import Sheet from "@mui/joy/Sheet";
 import Typography from "@mui/joy/Typography";
-import SearchIcon from "@mui/icons-material/Search";
-import { useEffect, useState } from "react";
-import { useAuthStore } from "../context/authContext";
-import api from "../lib/api";
 import { Tab, tabClasses, TabList, Tabs } from "@mui/joy";
 import BookCreatureTable from "../components/BookCreatureTable";
 import MagicCityTable from "../components/MagicCityTable";
 import RingTable from "../components/RingTable";
+import { useState } from "react";
 
-interface User {
-  id: number;
-  username: string;
-  role: string;
-}
 
 const MainPage = () => {
   const [tab, setTab] = useState<string>("bookCreature");
