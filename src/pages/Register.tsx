@@ -237,7 +237,7 @@ const Register = () => {
           right: 0,
           top: 0,
           bottom: 0,
-          left: { xs: 0, md: "50vw" },
+          left: { xs: "100vw", md: "50vw" },
           transition:
             "background-image var(--Transition-duration), left var(--Transition-duration) !important",
           transitionDelay: "calc(var(--Transition-duration) + 0.1s)",
