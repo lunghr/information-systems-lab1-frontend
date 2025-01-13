@@ -1,4 +1,5 @@
 import { makeAutoObservable } from "mobx";
+import api from "../lib/api";
 
 const AUTH_STORE_ID = "authStore";
 
@@ -16,9 +17,18 @@ class AuthStore {
     if (localStorage.getItem(AUTH_STORE_ID)) {
       const token = localStorage.getItem(AUTH_STORE_ID)!;
 
-      this.isAuthenticated = true;
-      this.token = token;
-      this.username = "TEST";
+      try {
+        const username = (await api.get("/auth/username", {
+          headers: { Authorization: `Bearer ${token}` },
+        })).data;
+
+        this.token = token;
+        this.username = username;
+        this.isAuthenticated = true;
+      } catch (error) {
+        console.error("Token is invalid", error);
+        this.logout();
+      }
     }
   }
 
