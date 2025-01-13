@@ -1,4 +1,4 @@
-import { CssBaseline, CssVarsProvider } from "@mui/joy";
+import { Box, CssBaseline, CssVarsProvider } from "@mui/joy";
 import authStore from "./store/auth";
 import { AuthContext } from "./context/authContext";
 import Router from "./pages/Router";
@@ -14,8 +14,10 @@ const App = () => {
       <BrowserRouter basename={basePath}>
         <CssVarsProvider defaultMode="system">
           <CssBaseline />
-          <Router />
-          <Controls />
+          <Box sx={{ display: "flex", minHeight: "100dvh" }}>
+            <Controls />
+            <Router />
+          </Box>
         </CssVarsProvider>
       </BrowserRouter>
     </AuthContext.Provider>

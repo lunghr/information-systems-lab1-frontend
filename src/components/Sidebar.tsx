@@ -67,7 +67,7 @@ const Sidebar = observer(() => {
     <Sheet
       className="Sidebar"
       sx={{
-        position: "fixed",
+        position: { xs: 'fixed', md: 'sticky' },
         transform: {
           xs: "translateX(calc(100% * (var(--SideNavigation-slideIn, 0) - 1)))",
           md: "none",
