@@ -90,7 +90,7 @@ const Auth = observer(() => {
         password: data.password,
       });
 
-      const token = response.data.token;
+      const token = response.data.accessToken;
       authStore.setAuth(data.login, token);
 
       setAuthErrorText("");
