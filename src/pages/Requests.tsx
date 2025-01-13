@@ -27,7 +27,7 @@ interface User {
   role: string;
 }
 
-export default function OrderTable() {
+const RequestsPage = () => {
   const authStore = useAuthStore();
   const [search, setSearch] = useState<string>("");
   const [filter, setFilter] = useState<string>("all");
@@ -276,4 +276,6 @@ export default function OrderTable() {
       </Sheet>
     </Box>
   );
-}
+};
+
+export default RequestsPage;
