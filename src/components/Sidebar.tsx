@@ -168,7 +168,7 @@ const Sidebar = observer(() => {
             </ListItem>
           </Link>
 
-          {authStore.getRole !== "ROLE_ADMIN" && (
+          {authStore.getRole === "ROLE_ADMIN" && (
             <ListItem nested>
               <Toggler
                 renderToggle={({ open, setOpen }) => (

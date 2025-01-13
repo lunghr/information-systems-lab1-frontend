@@ -29,8 +29,14 @@ const RouterComponent = observer(() => {
         <>
           <Route path="/" element={<MainPage />} />
           <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/admin/users" element={<UsersPage />} />
-          <Route path="/admin/requests" element={<RequestsPage />} />
+
+          {authContext.getRole === "ROLE_ADMIN" && (
+            <>
+              <Route path="/admin/users" element={<UsersPage />} />
+              <Route path="/admin/requests" element={<RequestsPage />} />
+            </>
+          )}
+
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="*" element={<NotFound />} />
         </>
