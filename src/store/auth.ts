@@ -16,9 +16,11 @@ class AuthStore {
 
   async loadFromStorage() {
     if (localStorage.getItem(AUTH_STORE_ID)) {
-      const token = localStorage.getItem(AUTH_STORE_ID)!;
+      let token = localStorage.getItem(AUTH_STORE_ID)!;
 
       try {
+        token = (await api.get("/auth/refresh", { headers: { Authorization: `Bearer ${token}` } })).data;
+
         const username = (await api.get("/auth/username", {
           headers: { Authorization: `Bearer ${token}` },
         })).data;
