@@ -7,6 +7,7 @@ class AuthStore {
   isAuthenticated: boolean = false;
   username?: string;
   token?: string;
+  role?: string;
 
   constructor() {
     makeAutoObservable(this);
@@ -22,8 +23,13 @@ class AuthStore {
           headers: { Authorization: `Bearer ${token}` },
         })).data;
 
+        const role = (await api.get("/auth/role", {
+          headers: { Authorization: `Bearer ${token}` },
+        })).data;
+
         this.token = token;
         this.username = username;
+        this.role = role;
         this.isAuthenticated = true;
       } catch (error) {
         console.error("Token is invalid", error);
@@ -32,10 +38,12 @@ class AuthStore {
     }
   }
 
-  setAuth(username: string, token: string) {
+  setAuth(username: string, token: string, role: string) {
     this.isAuthenticated = true;
     this.username = username;
     this.token = token;
+    this.role = role;
+
     localStorage.setItem(AUTH_STORE_ID, token);
   }
 
@@ -43,6 +51,7 @@ class AuthStore {
     this.isAuthenticated = false;
     this.username = undefined;
     this.token = undefined;
+    this.role = undefined;
     localStorage.removeItem(AUTH_STORE_ID);
   }
 
@@ -56,6 +65,10 @@ class AuthStore {
 
   get getToken() {
     return this.token;
+  }
+
+  get getRole() {
+    return this.role;
   }
 
 }

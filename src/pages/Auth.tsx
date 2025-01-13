@@ -91,7 +91,9 @@ const Auth = observer(() => {
       });
 
       const token = response.data.accessToken;
-      authStore.setAuth(data.login, token);
+      const role = response.data.role ?? "ROLE_USER";
+
+      authStore.setAuth(data.login, token, role);
 
       setAuthErrorText("");
       setAuthError(false);
